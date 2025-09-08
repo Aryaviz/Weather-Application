@@ -4,10 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather Application</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    #weather-container {
+    body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    #weather-container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 2em;
+      color: #333;
+      margin-bottom: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    #weather-data p {
+      font-size: 1.2em;
+      color: #555;
+    }
+    .weather-icon {
+      font-size: 3em;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -20,7 +51,7 @@
   <script>
     async function fetchWeather() {
       const apiKey = 'f38061b84a8393b7703abb526e958ef7'; // Replace with your actual API key
-      const city = 'Helsinki';
+      const city = 'Mukkam';
       const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
       try {
@@ -37,11 +68,24 @@
 
     function displayWeather(data) {
       const weatherContainer = document.getElementById('weather-data');
+      const weatherDescription = data.weather[0].description.toLowerCase();
+      let weatherIcon = '';
+
+      if (weatherDescription.includes('sun') || weatherDescription.includes('clear')) {
+        weatherIcon = '<i class="fas fa-sun weather-icon"></i>';
+      } else if (weatherDescription.includes('rain')) {
+        weatherIcon = '<i class="fas fa-cloud-rain weather-icon"></i>';
+      } else if (weatherDescription.includes('snow')) {
+        weatherIcon = '<i class="fas fa-snowflake weather-icon"></i>';
+      } else {
+        weatherIcon = '<i class="fas fa-cloud weather-icon"></i>';
+      }
+
       weatherContainer.innerHTML = `
         <p>Location: ${data.name}</p>
         <p>Temperature: ${data.main.temp} °C</p>
-        <p>Chance of Rain: ${data.weather[0].description.includes('rain') ? 'Yes' : 'No'}</p>
-        <p>Wind Speed: ${data.wind.speed} m/s</p>
+        <p>Weather: ${data.weather[0].description}</p>
+        ${weatherIcon}
       `;
     }
 
